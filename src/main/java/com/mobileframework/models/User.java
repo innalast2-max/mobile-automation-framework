@@ -1,10 +1,12 @@
-public class TestUser {
+package com.mobileframework.models;
+
+public class User {
 
     private String name;
     private String email;
     private int age;
 
-    public TestUser(String name, String email, int age) {
+    public User(String name, String email, int age) {
         this.name = name;
         this.email = email;
         this.age = age;
@@ -33,4 +35,16 @@ public class TestUser {
         return "User{name='" + name + "', email='" + email + "',  age=" + age + "}";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User other = (User) o;
+        return email.equals(other.email);
+    }
+
+    @Override
+    public int hashCode(){
+        return email.hashCode();
+    }
 }
