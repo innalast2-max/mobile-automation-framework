@@ -17,4 +17,6 @@ public class UserTest {
         assertTrue(testUser.toString().contains("Inna"),
                 "toString should contain the user's name");
     }
+
+
 }
