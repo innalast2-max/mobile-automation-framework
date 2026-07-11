@@ -1,6 +1,7 @@
 package com.mobileframework.tests;
 
 import com.mobileframework.data.UserRepository;
+import com.mobileframework.exceptions.UserNotFoundException;
 import com.mobileframework.models.User;
 import org.testng.annotations.Test;
 
@@ -111,5 +112,26 @@ public class UserRepositoryTests {
                 "Email of added user should exist");
         assertFalse(repository.isEmailExist("ghost@test.com"),
                 "Unknown email should not exist");
+    }
+
+    @Test
+    public void getUserByEmailThrowsForUnknownEmail() {
+        UserRepository repository = new UserRepository();
+
+        UserNotFoundException ex = expectThrows(UserNotFoundException.class,
+                () -> repository.getUserByEmail("ghost@test.com"));
+
+        assertTrue(ex.getMessage().contains("ghost@test.com"),
+                "Exception message should contain the email");
+    }
+
+    @Test
+    public void getUserByEmailReturnsAddedUser() {
+        UserRepository repository = new UserRepository();
+        User user = new User("Inna", "inna@test.com", 35);
+        repository.addUser(user);
+
+        assertEquals(repository.getUserByEmail("inna@test.com"), user,
+                "Should return the added user without throwing");
     }
 }

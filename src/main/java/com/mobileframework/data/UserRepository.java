@@ -1,5 +1,6 @@
 package com.mobileframework.data;
 
+import com.mobileframework.exceptions.UserNotFoundException;
 import com.mobileframework.models.User;
 
 import java.util.*;
@@ -7,8 +8,8 @@ import java.util.stream.Collectors;
 
 public class UserRepository {
 
-    private final Map<String, User> usersByEmail = new HashMap<>();
     private static final int ADULT_AGE = 18;
+    private final Map<String, User> usersByEmail = new HashMap<>();
 
     public void addUser(User user) {
         usersByEmail.put(user.getEmail(), user);
@@ -58,4 +59,9 @@ public class UserRepository {
                 .filter(user -> user.getAge() >= ADULT_AGE)
                 .count();
     }
+
+    public User getUserByEmail(String email) {
+        return findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
+    }
+
 }
