@@ -5,8 +5,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 public class RandomUtilsTest {
     @Test
@@ -25,5 +24,12 @@ public class RandomUtilsTest {
         String result = RandomUtils.pickRandom(names);
 
         assertTrue(names.contains(result), "Picked element should belong to the source list");
+    }
+
+    @Test
+    public void pickRandomThrowsForEmptyList() {
+        IllegalArgumentException ex = expectThrows(IllegalArgumentException.class,
+                () -> RandomUtils.pickRandom(List.of()));
+        assertTrue(ex.getMessage().contains("empty"), "Message should explain the problem");
     }
 }
