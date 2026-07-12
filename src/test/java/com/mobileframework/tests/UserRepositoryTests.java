@@ -16,7 +16,7 @@ public class UserRepositoryTests {
     public void addedUserCanBeFoundByEmail() {
         // Arrange
         UserRepository repository = new UserRepository();
-        User user = new User("Inna", "inna.yu@gmail.com", 35);
+        User user = User.builder().name("Inna").email("inna.yu@gmail.com").age(35).build();
 
         // Act
         repository.addUser(user);
@@ -38,8 +38,8 @@ public class UserRepositoryTests {
     @Test
     public void foundUserEqualsNewUserWithSameEmail() {
         UserRepository repository = new UserRepository();
-        User user1 = new User("Inna", "inna.yu@gmail.com", 35);
-        User user2 = new User("Inna", "inna.yu@gmail.com", 35);
+        User user1 = User.builder().name("Inna").email("inna.yu@gmail.com").age(35).build();
+        User user2 = User.builder().name("Inna").email("inna.yu@gmail.com").age(35).build();
 
         repository.addUser(user1);
         repository.addUser(user2);
@@ -53,9 +53,9 @@ public class UserRepositoryTests {
     public void findUsersOlderThanReturnsOnlyMatchingUsers() {
         // Arrange — юзери навколо межі 30
         UserRepository repository = new UserRepository();
-        User young = new User("Yehor", "yehor@test.com", 25);   // молодший — має відсіятись
-        User exact = new User("Inna", "inna@test.com", 30);   // рівно 30 — межа!
-        User older = new User("Olha", "olha@test.com", 40);   // старший — має потрапити
+        User young = User.builder().name("Yehor").email("yehor@test.com").age(25).build();// молодший — має відсіятись
+        User exact = User.builder().name("Inna").email("inna@test.com").age(30).build();   // рівно 30 — межа!
+        User older = User.builder().name("Olha").email("olha@test.com").age(40).build();   // старший — має потрапити
 
         repository.addUser(young);
         repository.addUser(exact);
@@ -74,8 +74,8 @@ public class UserRepositoryTests {
     @Test
     public void findAllEmails() {
         UserRepository repository = new UserRepository();
-        User user1 = new User("Yehor", "yehor@test.com", 25);
-        User user2 = new User("Inna", "inna@test.com", 30);
+        User user1 = User.builder().name("Yehor").email("yehor@test.com").age(25).build();
+        User user2 = User.builder().name("Inna").email("inna@test.com").age(30).build();
 
         repository.addUser(user1);
         repository.addUser(user2);
@@ -89,9 +89,9 @@ public class UserRepositoryTests {
     @Test
     public void groupUsersByAgeGroupsCorrectly() {
         UserRepository repository = new UserRepository();
-        User user1 = new User("Yehor", "yehor@test.com", 25);
-        User user2 = new User("Inna", "inna@test.com", 35);
-        User user3 = new User("Roman", "roman@test.com", 35);
+        User user1 = User.builder().name("Yehor").email("yehor@test.com").age(25).build();
+        User user2 = User.builder().name("Inna").email("inna@test.com").age(35).build();
+        User user3 = User.builder().name("Roman").email("roman@test.com").age(35).build();
 
         assertTrue(repository.findUsersOlderThan(35).isEmpty(), "Should return no users with age >= 35");
 
@@ -105,8 +105,10 @@ public class UserRepositoryTests {
 
     @Test
     public void isEmailExistReturnsTrueForAddedUserAndFalseForUnknown() {
+        User user = User.builder().name("Inna").email("inna@test.com").age(35).build();
+
         UserRepository repository = new UserRepository();
-        repository.addUser(new User("Inna", "inna@test.com", 35));
+        repository.addUser(user);
 
         assertTrue(repository.isEmailExist("inna@test.com"),
                 "Email of added user should exist");
@@ -128,7 +130,7 @@ public class UserRepositoryTests {
     @Test
     public void getUserByEmailReturnsAddedUser() {
         UserRepository repository = new UserRepository();
-        User user = new User("Inna", "inna@test.com", 35);
+        User user = User.builder().name("Inna").email("inna@test.com").age(35).build();
         repository.addUser(user);
 
         assertEquals(repository.getUserByEmail("inna@test.com"), user,

@@ -1,34 +1,24 @@
 package com.mobileframework.models;
 
-public final class User {
+public record User(String name, String email, int age) {
 
-    private final String name;
-    private final String email;
-    private final int age;
-
-    public User(String name, String email, int age) {
-        this.name = name;
-        this.email = email;
-        this.age = age;
+    public static Builder builder() {
+        return new Builder();
     }
 
-    public String getName() {
-        return name;
-    }
+    public static final class Builder {
+        private String name;
+        private String email;
+        private int age;
 
-    public String getEmail() {
-        return email;
-    }
+        public Builder name(String name) { this.name = name; return this; }
+        public Builder email(String email) { this.email = email; return this; }
+        public Builder age(int age) { this.age = age; return this; }
 
-    public int getAge() {
-        return age;
+        public User build() {
+            return new User(name, email, age);
+        }
     }
-
-    @Override
-    public String toString() {
-        return "User { name='" + name + "', email='" + email + "',  age=" + age + " } ";
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
