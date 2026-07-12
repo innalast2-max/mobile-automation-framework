@@ -12,7 +12,7 @@ public class UserRepository {
     private final Map<String, User> usersByEmail = new HashMap<>();
 
     public void addUser(User user) {
-        usersByEmail.put(user.getEmail(), user);
+        usersByEmail.put(user.email(), user);
     }
 
     public Optional<User> findByEmail(String email) {
@@ -33,30 +33,30 @@ public class UserRepository {
 
     public List<User> findUsersOlderThan(int age) {
         return usersByEmail.values().stream()
-                .filter(user -> user.getAge() >= age)
+                .filter(user -> user.age() >= age)
                 .toList();
     }
 
     public List<String> getAllEmails() {
         return usersByEmail.values().stream()
-                .map(User::getEmail)
+                .map(User::email)
                 .toList();
     }
 
     public List<User> getUsersSortedByName() {
         return usersByEmail.values().stream()
-                .sorted(Comparator.comparing(User::getName))
+                .sorted(Comparator.comparing(User::name))
                 .toList();
     }
 
     public Map<Integer, List<User>> groupUsersByAge() {
         return usersByEmail.values().stream()
-                .collect(Collectors.groupingBy(User::getAge));
+                .collect(Collectors.groupingBy(User::age));
     }
 
     public long countAdults() {
         return usersByEmail.values().stream()
-                .filter(user -> user.getAge() >= ADULT_AGE)
+                .filter(user -> user.age() >= ADULT_AGE)
                 .count();
     }
 
