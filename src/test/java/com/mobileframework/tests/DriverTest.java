@@ -12,13 +12,13 @@ public class DriverTest {
     public void createDriverReturnsAndroidDriverForAndroidPlatform() {
         Driver driver = DriverFactory.createDriver(Platform.ANDROID);
         assertTrue(driver instanceof AndroidDriver, "Factory should create AndroidDriver for ANDROID");
-        assertEquals(driver.getPlatformName(), "Android Driver");
+        assertEquals(driver.getPlatformName(), "Android");
     }
 
     @Test
-    public void createDriverReturnsIOSDriverForAndroidPlatform() {
+    public void createDriverReturnsIOSDriverForIOSPlatform() {
         Driver driver = DriverFactory.createDriver(Platform.IOS);
         assertTrue(driver instanceof IOSDriver, "Factory should create IOSDriver for IOS");
-        assertEquals(driver.getPlatformName(), "IOS Driver");
+        assertEquals(driver.getPlatformName(), "IOS");
     }
 }

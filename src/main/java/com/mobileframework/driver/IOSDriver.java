@@ -14,6 +14,6 @@ public class IOSDriver implements Driver {
 
     @Override
     public String getPlatformName() {
-        return "IOS Driver";
+        return "IOS";
     }
 }

@@ -13,6 +13,6 @@ public class AndroidDriver implements Driver {
 
     @Override
     public String getPlatformName() {
-        return "Android Driver";
+        return "Android";
     }
 }

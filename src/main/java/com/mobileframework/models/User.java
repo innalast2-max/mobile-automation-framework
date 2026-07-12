@@ -11,12 +11,12 @@ public record User(String name, String email, int age) {
         private String email;
         private int age;
 
-        public Builder name(String name) { this.name = name; return this; }    // повертає себе — ланцюжок!
+        public Builder name(String name) { this.name = name; return this; }
         public Builder email(String email) { this.email = email; return this; }
         public Builder age(int age) { this.age = age; return this; }
 
         public User build() {
-            return new User(name, email, age);       // збирає immutable об'єкт
+            return new User(name, email, age);
         }
     }
     @Override
