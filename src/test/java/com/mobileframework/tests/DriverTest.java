@@ -1,10 +1,12 @@
 package com.mobileframework.tests;
 
+import com.mobileframework.config.ConfigLoader;
 import com.mobileframework.driver.*;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import java.util.Properties;
+
+import static org.testng.Assert.*;
 
 public class DriverTest {
 
@@ -20,5 +22,34 @@ public class DriverTest {
         Driver driver = DriverFactory.createDriver(Platform.IOS);
         assertTrue(driver instanceof IOSDriver, "Factory should create IOSDriver for IOS");
         assertEquals(driver.getPlatformName(), "IOS");
+    }
+
+    @Test
+    public void getInstanceReturnsSameInstance() {
+        ConfigLoader first = ConfigLoader.getInstance();
+        ConfigLoader second = ConfigLoader.getInstance();
+
+        assertSame(first, second, "getInstance must return the same instance");
+    }
+
+    @Test
+    public void configLoaderReturnsPlatformFromFile() {
+        String platform = ConfigLoader.getInstance().getProperty("platform");
+
+        assertEquals(platform, "IOS", "Platform should be loaded from config.properties");
+    }
+
+    @Test
+    public void driverLifecycleWorksWithConfigPlatform() {
+
+        String platformName = ConfigLoader.getInstance().getProperty("platform");
+        Platform platform = Platform.valueOf(platformName);
+        Driver driver = DriverFactory.createDriver(platform);
+        DriverManager.setDriver(driver);
+
+        assertSame(DriverManager.getDriver(), driver, "Manager should return the driver we set");
+
+        DriverManager.removeDriver();
+        assertNull(DriverManager.getDriver(), "After remove, driver should be null");
     }
 }
