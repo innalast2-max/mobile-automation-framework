@@ -4,8 +4,6 @@ import com.mobileframework.config.ConfigLoader;
 import com.mobileframework.driver.*;
 import org.testng.annotations.Test;
 
-import java.util.Properties;
-
 import static org.testng.Assert.*;
 
 public class DriverTest {
