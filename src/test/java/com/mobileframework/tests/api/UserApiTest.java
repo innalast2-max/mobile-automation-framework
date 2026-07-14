@@ -10,7 +10,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.testng.Assert.*;
 
-public class ApiTest {
+public class UserApiTest {
 
     @Test
     public void createUserReturnsCreatedWithId() {
@@ -39,7 +39,7 @@ public class ApiTest {
                 .then()
                 .spec(ApiSpecs.successSpec())
                 .body("data.id", equalTo(2))
-                .extract().body().as(SingleUserResponse.class);
+                .extract().as(SingleUserResponse.class);
 
         assertEquals(response.data().id(), 2, "User id should be 2");
         assertNotNull(response.data().email(), "Email should not be null");

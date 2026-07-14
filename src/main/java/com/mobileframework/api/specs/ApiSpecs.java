@@ -10,7 +10,8 @@ import io.restassured.specification.ResponseSpecification;
 
 import static org.hamcrest.Matchers.lessThan;
 
-public class ApiSpecs {
+public final class ApiSpecs {
+    private ApiSpecs() { }
 
     public static RequestSpecification requestSpec() {
         return new RequestSpecBuilder()
