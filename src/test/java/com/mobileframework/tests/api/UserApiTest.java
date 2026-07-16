@@ -2,12 +2,14 @@ package com.mobileframework.tests.api;
 
 import com.mobileframework.api.models.CreateUserRequest;
 import com.mobileframework.api.models.CreateUserResponse;
+import com.mobileframework.api.models.LoginRequest;
 import com.mobileframework.api.models.SingleUserResponse;
 import com.mobileframework.api.specs.ApiSpecs;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.testng.Assert.*;
 
 public class UserApiTest {
@@ -55,5 +57,32 @@ public class UserApiTest {
                 .get("/api/users/23")
                 .then()
                 .statusCode(404);
+    }
+
+    @Test
+    public void loginWithValidCredentialsReturnsToken() {
+        LoginRequest request = new LoginRequest("eve.holt@reqres.in", "cityslicka");
+
+        String token = given().spec(ApiSpecs.requestSpec())
+                .body(request).
+                when().post("/api/login")
+                .then()
+                .statusCode(200).extract().path("token");
+
+        assertNotNull(token, "Token should be returned for valid credentials");
+        assertFalse(token.isEmpty(), "Token should not be empty");
+    }
+
+    @Test
+    public void loginWithoutPasswordReturnsBadRequest() {
+        LoginRequest request = new LoginRequest("eve.holt@reqres.in", null);
+
+        given().spec(ApiSpecs.requestSpec())
+                .body(request).
+                when().post("/api/login")
+                .then()
+                .statusCode(400)
+                .body("error", notNullValue());
+
     }
 }
