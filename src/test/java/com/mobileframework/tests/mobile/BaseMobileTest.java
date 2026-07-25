@@ -28,6 +28,9 @@ public abstract class BaseMobileTest {
     }
 
     protected AppiumDriver driver() {
-        return DriverManager.getDriver().getAppiumDriver();
+        var d = DriverManager.getDriver();
+        if (d == null) throw new IllegalStateException(
+                "Driver not initialized — driver() must be called inside a test method");
+        return d.getAppiumDriver();
     }
 }

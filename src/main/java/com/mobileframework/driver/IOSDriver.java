@@ -25,16 +25,17 @@ public class IOSDriver implements Driver {
         } catch (MalformedURLException e) {
             throw new IllegalStateException("Invalid Appium server URL", e);
         }
+        // TODO: remove when explicit waits land in BasePage
         appiumDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
     }
 
     @Override
     public void stop() {
-            if (appiumDriver != null) {
-                appiumDriver.quit();
-                appiumDriver = null;
-            }
+        if (appiumDriver != null) {
+            appiumDriver.quit();
+            appiumDriver = null;
+        }
     }
 
     @Override
@@ -43,5 +44,7 @@ public class IOSDriver implements Driver {
     }
 
     @Override
-    public AppiumDriver getAppiumDriver() { return appiumDriver; }
+    public AppiumDriver getAppiumDriver() {
+        return appiumDriver;
+    }
 }

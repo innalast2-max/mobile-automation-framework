@@ -7,7 +7,9 @@ public class AndroidDriver implements Driver {
 
     @Override
     public void start() {
-        System.out.println("Android driver started");
+
+        throw new UnsupportedOperationException(
+                "Android driver is not implemented yet. Use platform=IOS.");
     }
 
     @Override
