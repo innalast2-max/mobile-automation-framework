@@ -20,25 +20,11 @@ public class LoginPage extends BasePage {
     @iOSXCUITFindBy(iOSNsPredicate = "type == 'XCUIElementTypeButton' AND name == 'Login'")
     private SelenideAppiumElement loginButton;
 
-    @iOSXCUITFindBy(iOSNsPredicate = "type == 'XCUIElementTypeButton' AND name == 'Return'")
-    private SelenideAppiumElement keyboardReturnKey;
-
-    @iOSXCUITFindBy(iOSNsPredicate =
-            "type == 'XCUIElementTypeButton' AND name == 'bob@example.com'")
-    private SelenideAppiumElement predefinedUserButton;
-
     // TODO: broken on iOS — keyboard overlaps Login button (see Sprint 2 backlog).
-   //   Use loginAsPredefinedUser() until fixed.
     public ProductsPage loginAs(Credentials credentials) {
         usernameField.setValue(credentials.username());
         passwordField.setValue(credentials.password());
         hideKeyboard();
-        loginButton.click();
-        return screen(ProductsPage.class);
-    }
-
-    public ProductsPage loginAsPredefinedUser() {
-        predefinedUserButton.click();
         loginButton.click();
         return screen(ProductsPage.class);
     }
