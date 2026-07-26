@@ -1,4 +1,4 @@
-package data;
+package com.mobileframework.tests.data;
 
 import com.mobileframework.config.ConfigLoader;
 import com.mobileframework.models.Credentials;

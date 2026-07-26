@@ -2,11 +2,12 @@ package com.mobileframework.mobile.pages;
 
 import com.codeborne.selenide.appium.SelenideAppiumElement;
 import com.mobileframework.models.Credentials;
-import com.mobileframework.models.User;
+import io.appium.java_client.AppiumBy;
 import io.appium.java_client.pagefactory.iOSXCUITFindBy;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.appium.ScreenObject.screen;
+import static com.codeborne.selenide.appium.SelenideAppium.$;
 
 public class LoginPage extends BasePage {
 
@@ -26,6 +27,8 @@ public class LoginPage extends BasePage {
             "type == 'XCUIElementTypeButton' AND name == 'bob@example.com'")
     private SelenideAppiumElement predefinedUserButton;
 
+    // TODO: broken on iOS — keyboard overlaps Login button (see Sprint 2 backlog).
+   //   Use loginAsPredefinedUser() until fixed.
     public ProductsPage loginAs(Credentials credentials) {
         usernameField.setValue(credentials.username());
         passwordField.setValue(credentials.password());
@@ -45,9 +48,12 @@ public class LoginPage extends BasePage {
         return this;
     }
 
-    private void dismissKeyboard() {
-        if (keyboardReturnKey.exists()) {
-            keyboardReturnKey.click();
-        }
+    // TODO: platform-specific locator, revisit when Android lands.
+    public ProductsPage loginAsListedUser(String username) {
+        $(AppiumBy.iOSNsPredicateString(
+                "type == 'XCUIElementTypeButton' AND name == '%s'".formatted(username)
+        )).click();
+        loginButton.click();
+        return screen(ProductsPage.class);
     }
 }

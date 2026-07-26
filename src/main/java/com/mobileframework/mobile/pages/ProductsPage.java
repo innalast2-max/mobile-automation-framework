@@ -5,7 +5,7 @@ import io.appium.java_client.pagefactory.iOSXCUITFindBy;
 
 import static com.codeborne.selenide.Condition.visible;
 
-public class ProductsPage extends BasePage{
+public class ProductsPage extends BasePage {
 
     @iOSXCUITFindBy(accessibility = "Catalog-screen")
     private SelenideAppiumElement catalogScreen;
