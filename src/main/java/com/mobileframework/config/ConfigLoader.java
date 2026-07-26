@@ -21,9 +21,30 @@ public final class ConfigLoader {
         }
     }
 
-    public static ConfigLoader getInstance() { return INSTANCE; }
+    public static ConfigLoader getInstance() {
+        return INSTANCE;
+    }
 
     public String getProperty(String key) {
+        String fromSystem = System.getProperty(key);
+        if (fromSystem != null && !fromSystem.isBlank()) return fromSystem;
+
+        String fromEnv = System.getenv(key.toUpperCase().replace('.', '_'));
+        if (fromEnv != null && !fromEnv.isBlank()) return fromEnv;
         return properties.getProperty(key);
+    }
+
+    public String getRequiredProperty(String key) {
+        String value = getProperty(key);
+        if (value == null || value.isBlank()) {
+            throw new IllegalStateException("Missing required config key: " + key);
+        }
+        return value;
+    }
+
+    public long getLongProperty(String key, long defaultValue) {
+        String value = getProperty(key);
+        if (value == null || value.isBlank()) return defaultValue;
+        return Long.parseLong(value.trim());
     }
 }
