@@ -5,32 +5,44 @@ on:
     branches: [ main ]
   pull_request:
 
+# Скасовує застарілі прогони, якщо пушиш кілька разів поспіль у ту саму гілку
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   fast-tests:
     name: Unit & API tests
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    # contents: write потрібен, щоб запушити звіт у гілку gh-pages
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
           cache: maven
 
+      # Мобільні тести виключені в pom (потрібен -Pmobile + Appium + симулятор)
       - name: Run tests
         run: mvn -B test
 
+      # if: always() — звіт потрібен саме тоді, коли тести червоні
       - name: Generate Allure report
         if: always()
         run: mvn -B allure:report
 
-      - name: Upload Allure report
+      - name: Upload Allure report (artifact)
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: allure-report
           path: target/site/allure-maven-plugin
@@ -38,7 +50,31 @@ jobs:
 
       - name: Upload Surefire reports
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: surefire-reports
           path: target/surefire-reports
+
+      # Кожен PR і кожна гілка публікуються у власну підтеку gh-pages.
+      # keep_files: true — інакше нова публікація стирає всі попередні звіти.
+      - name: Publish Allure report to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: target/site/allure-maven-plugin
+          destination_dir: >-
+            ${{ github.event_name == 'pull_request'
+                && format('pr-{0}', github.event.number)
+                || github.ref_name }}
+          keep_files: true
+
+      - name: Add report link to run summary
+        if: always()
+        run: |
+          DIR="${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.number) || github.ref_name }}"
+          URL="https://innalast2-max.github.io/mobile-automation-framework/$DIR/"
+          echo "### 📊 Allure report" >> $GITHUB_STEP_SUMMARY
+          echo "[$URL]($URL)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "_Може знадобитись 1-2 хвилини після завершення прогону._" >> $GITHUB_STEP_SUMMARY
