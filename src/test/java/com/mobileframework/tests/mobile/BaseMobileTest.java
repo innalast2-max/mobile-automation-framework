@@ -1,5 +1,7 @@
 package com.mobileframework.tests.mobile;
 
+import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.WebDriverRunner;
 import com.mobileframework.config.ConfigLoader;
 import com.mobileframework.driver.Driver;
 import com.mobileframework.driver.DriverFactory;
@@ -9,15 +11,20 @@ import io.appium.java_client.AppiumDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
+
 public abstract class BaseMobileTest {
 
     @BeforeMethod
     public void setUp() {
-        var platform = Platform.valueOf(
-                ConfigLoader.getInstance().getProperty("platform"));
+        var config = ConfigLoader.getInstance();
+
+        var platform = Platform.valueOf(config.getProperty("platform"));
         Driver driver = DriverFactory.createDriver(platform);
         driver.start();
         DriverManager.setDriver(driver);
+
+        WebDriverRunner.setWebDriver(driver.getAppiumDriver());
+        Configuration.timeout = config.getLongProperty("selenide.timeout", 10_000);
     }
 
     @AfterMethod(alwaysRun = true)
