@@ -62,4 +62,5 @@ xcrun simctl install booted "src/test/resources/apps/My Demo App.app"   # iOS
 
 ## CI
 
-GitHub Actions: build + смок на емуляторі per-PR → Allure-звіт на GitHub Pages. Червоний smoke блокує merge.
+GitHub Actions (`Unit & API tests`): `mvn -B test` — юніт і API. Мобільні тести в CI не бігають (див. «Запуск тестів»), це ручний крок локально. Allure-звіт публікується на GitHub Pages у підтеку `pr-<номер>`, зокрема й для впалих прогонів.
+
