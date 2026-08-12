@@ -14,7 +14,7 @@ public class LoginTest extends BaseMobileTest {
         screen(MoreMenuPage.class)
                 .openLogin()
                 .shouldBeOpened()
-                .loginAsListedUser(valid().username())
+                .loginAs(valid())
                 .shouldBeOpened();
     }
 }
