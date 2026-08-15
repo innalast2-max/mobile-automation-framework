@@ -18,7 +18,7 @@ public abstract class BaseMobileTest {
     public void setUp() {
         var config = ConfigLoader.getInstance();
 
-        var platform = Platform.valueOf(config.getProperty("platform"));
+        var platform = Platform.current();
         Driver driver = DriverFactory.createDriver(platform);
         driver.start();
         DriverManager.setDriver(driver);

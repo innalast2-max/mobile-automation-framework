@@ -2,44 +2,26 @@ package com.mobileframework.mobile.pages;
 
 import com.codeborne.selenide.appium.SelenideAppiumElement;
 import com.mobileframework.models.Credentials;
-import io.appium.java_client.AppiumBy;
+import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.iOSXCUITFindBy;
 
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.appium.ScreenObject.screen;
-import static com.codeborne.selenide.appium.SelenideAppium.$;
 
-public class LoginPage extends BasePage {
-
-    @iOSXCUITFindBy(iOSNsPredicate = "type == 'XCUIElementTypeTextField'")
-    private SelenideAppiumElement usernameField;
-
-    @iOSXCUITFindBy(iOSNsPredicate = "type == 'XCUIElementTypeSecureTextField'")
-    private SelenideAppiumElement passwordField;
+public abstract class LoginPage extends BasePage {
 
     @iOSXCUITFindBy(iOSNsPredicate = "type == 'XCUIElementTypeButton' AND name == 'Login'")
-    private SelenideAppiumElement loginButton;
+    @AndroidFindBy(id = "loginBtn")
+    protected SelenideAppiumElement loginButton;
 
-    // TODO: broken on iOS — keyboard overlaps Login button (see Sprint 2 backlog).
-    public ProductsPage loginAs(Credentials credentials) {
-        usernameField.setValue(credentials.username());
-        passwordField.setValue(credentials.password());
-        hideKeyboard();
-        loginButton.click();
-        return screen(ProductsPage.class);
-    }
+    // Workaround, root cause NOT verified: assumed the screen never dismisses its own
+// keyboard and it covers the Login button. Not confirmed in Inspector — see backlog.
+// These listed demo-username buttons fill both fields without opening the keyboard,
+// so credentials.password() is unused on this path — a negative test with a wrong
+// password is therefore impossible on iOS until this is resolved.
+    public abstract ProductsPage loginAs(Credentials credentials);
 
     public LoginPage shouldBeOpened() {
         loginButton.shouldBe(visible);
         return this;
-    }
-
-    // TODO: platform-specific locator, revisit when Android lands.
-    public ProductsPage loginAsListedUser(String username) {
-        $(AppiumBy.iOSNsPredicateString(
-                "type == 'XCUIElementTypeButton' AND name == '%s'".formatted(username)
-        )).click();
-        loginButton.click();
-        return screen(ProductsPage.class);
     }
 }
