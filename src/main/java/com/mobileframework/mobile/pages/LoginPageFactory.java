@@ -1,7 +1,8 @@
 package com.mobileframework.mobile.pages;
 
-import com.mobileframework.config.ConfigLoader;
 import com.mobileframework.driver.Platform;
+
+import static com.codeborne.selenide.appium.ScreenObject.screen;
 
 public final class LoginPageFactory {
 
@@ -9,10 +10,9 @@ public final class LoginPageFactory {
     }
 
     public static LoginPage create() {
-        Platform platform = Platform.valueOf(ConfigLoader.getInstance().getProperty("platform"));
-        return switch (platform) {
-            case ANDROID -> new AndroidLoginPage();
-            case IOS -> new IOSLoginPage();
+        return switch (Platform.current()) {
+            case ANDROID -> screen(AndroidLoginPage.class);
+            case IOS -> screen(IOSLoginPage.class);
         };
     }
 }

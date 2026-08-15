@@ -18,6 +18,6 @@ public class MoreMenuPage extends BasePage {
     public LoginPage openLogin() {
         moreTab.click();
         loginMenuItem.click();
-        return screen(LoginPageFactory.create());
+        return LoginPageFactory.create();
     }
 }
