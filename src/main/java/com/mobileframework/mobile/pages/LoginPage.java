@@ -13,6 +13,11 @@ public abstract class LoginPage extends BasePage {
     @AndroidFindBy(id = "loginBtn")
     protected SelenideAppiumElement loginButton;
 
+    // Workaround, root cause NOT verified: assumed the screen never dismisses its own
+// keyboard and it covers the Login button. Not confirmed in Inspector — see backlog.
+// These listed demo-username buttons fill both fields without opening the keyboard,
+// so credentials.password() is unused on this path — a negative test with a wrong
+// password is therefore impossible on iOS until this is resolved.
     public abstract ProductsPage loginAs(Credentials credentials);
 
     public LoginPage shouldBeOpened() {
