@@ -22,7 +22,7 @@ Driver (інтерфейс)
   → Page Objects через Selenide-appium (ScreenObject.screen())
 ```
 
-Пакети: `com.mobileframework.driver`, `.config`, `.mobile.pages`, `.models`, `.data`, `.api`, `.utils`, `.exceptions`.
+Пакети: `com.mobileframework.driver`, `.config`, `.mobile.pages`, `.models`, `.data`, `.api`, `.utils`, `.exceptions`, `.listeners`.
 
 Патерни й де вони живуть: Factory — `DriverFactory`; Singleton — `ConfigLoader`; ThreadLocal — `DriverManager`; Builder/POJO — `models/`; Page Object + Fluent — `mobile/pages/` (методи повертають наступну сторінку або `this`).
 
